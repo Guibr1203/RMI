@@ -1,0 +1,52 @@
+//Script Banco de dados//
+CREATE DATABASE IF NOT EXISTS db_hotel;
+
+USE db_hotel;
+
+CREATE TABLE IF NOT EXISTS funcionario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    senha VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS hospede (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(14) UNIQUE NOT NULL,
+    telefone VARCHAR(20)
+);
+
+CREATE TABLE IF NOT EXISTS quarto (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero INT UNIQUE NOT NULL,
+    tipo VARCHAR(50) NOT NULL, -- Ex: Solteiro, Casal, Suíte
+    status VARCHAR(20) NOT NULL, -- Ex: Disponível, Ocupado, Manutenção
+    preco_diaria DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reserva (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_hospede INT NOT NULL,
+    id_quarto INT NOT NULL,
+    data_checkin DATE NOT NULL,
+    data_checkout DATE NOT NULL,
+    status VARCHAR(20) NOT NULL, -- Ex: Ativa, Concluída, Cancelada
+    FOREIGN KEY (id_hospede) REFERENCES hospede(id),
+    FOREIGN KEY (id_quarto) REFERENCES quarto(id)
+);
+
+-- Inserção de dados de exemplo para facilitar os testes
+INSERT INTO quarto (numero, tipo, status, preco_diaria) VALUES
+(101, 'Solteiro', 'Disponível', 150.00),
+(102, 'Solteiro', 'Disponível', 150.00),
+(201, 'Casal', 'Disponível', 250.00),
+(202, 'Casal', 'Ocupado', 250.00),
+(301, 'Suíte', 'Disponível', 400.00);
+
+INSERT INTO hospede (nome, cpf, telefone) VALUES
+('João da Silva', '111.222.333-44', '(31) 99999-8888');
+
+INSERT INTO funcionario (nome, cargo, login, senha) VALUES
+('Admin', 'Gerente', 'admin', 'admin');
